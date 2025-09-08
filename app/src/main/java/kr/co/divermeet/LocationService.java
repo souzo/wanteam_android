@@ -14,7 +14,9 @@ import android.os.Looper;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.lifecycle.MutableLiveData; // LiveData를 위해 추가
+
+// LocalBroadcastManager import 삭제
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -29,6 +31,9 @@ public class LocationService extends Service {
     private LocationCallback locationCallback;
     private static final String CHANNEL_ID = "LocationServiceChannel";
 
+    // 위치 업데이트를 위한 public static LiveData
+    public static final MutableLiveData<Location> locationLiveData = new MutableLiveData<>();
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -41,11 +46,14 @@ public class LocationService extends Service {
                     return;
                 }
                 for (Location location : locationResult.getLocations()) {
-                    // 위치 정보를 MainActivity로 브로드캐스트
-                    Intent intent = new Intent("location-update");
-                    intent.putExtra("latitude", location.getLatitude());
-                    intent.putExtra("longitude", location.getLongitude());
-                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+                    // LiveData에 위치 정보 게시
+                    locationLiveData.postValue(location);
+
+                    // LocalBroadcastManager 관련 코드 삭제:
+                    // Intent intent = new Intent("location-update");
+                    // intent.putExtra("latitude", location.getLatitude());
+                    // intent.putExtra("longitude", location.getLongitude());
+                    // LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
                 }
             }
         };
@@ -63,7 +71,7 @@ public class LocationService extends Service {
         startForeground(1, notification);
         startLocationUpdates();
 
-        return START_STICKY; // 서비스가 종료되더라도 시스템이 다시 시작
+        return START_STICKY;
     }
 
     private void startLocationUpdates() {
@@ -73,6 +81,7 @@ public class LocationService extends Service {
                 .build();
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: 권한이 없을 경우, 서비스를 중단하는 것 외에 LiveData 등을 통해 오류 상태를 UI에 알리는 것을 고려
             stopSelf();
             return;
         }
@@ -87,19 +96,23 @@ public class LocationService extends Service {
                     NotificationManager.IMPORTANCE_DEFAULT
             );
             NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(serviceChannel);
+            if (manager != null) {
+                manager.createNotificationChannel(serviceChannel);
+            }
         }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        fusedLocationClient.removeLocationUpdates(locationCallback);
+        if (fusedLocationClient != null) {
+            fusedLocationClient.removeLocationUpdates(locationCallback);
+        }
     }
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return null; // 이 서비스는 바인딩을 사용하지 않습니다.
     }
 }

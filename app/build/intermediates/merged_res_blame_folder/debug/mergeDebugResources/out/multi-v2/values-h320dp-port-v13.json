@@ -1,16 +1,16 @@
 {
     "logs": [
         {
-            "outputFile": "kr.co.divermeet.app-mergeDebugResources-34:/values-h320dp-port-v13/values-h320dp-port-v13.xml",
+            "outputFile": "kr.co.divermeet.app-mergeDebugResources-39:/values-h320dp-port-v13/values-h320dp-port-v13.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\Administrator\\.gradle\\caches\\8.14.3\\transforms\\39a707815aa0c43c8651b9f7e0ce9ea7\\transformed\\material-1.10.0\\res\\values-h320dp-port-v13\\values-h320dp-port-v13.xml",
+                    "source": "/Users/souzo/.gradle/caches/8.13/transforms/28bae6faa41a71d8b1757eea86b5f3c9/transformed/material-1.13.0/res/values-h320dp-port-v13/values-h320dp-port-v13.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
                         "startOffsets": "55",
-                        "endColumns": "75",
-                        "endOffsets": "126"
+                        "endColumns": "63",
+                        "endOffsets": "114"
                     }
                 }
             ]
