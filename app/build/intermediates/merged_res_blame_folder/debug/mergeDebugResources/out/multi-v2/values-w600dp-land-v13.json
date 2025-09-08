@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "kr.co.divermeet.app-mergeDebugResources-34:/values-w600dp-land-v13/values-w600dp-land-v13.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\Administrator\\.gradle\\caches\\8.14.3\\transforms\\39a707815aa0c43c8651b9f7e0ce9ea7\\transformed\\material-1.10.0\\res\\values-w600dp-land-v13\\values-w600dp-land-v13.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "54",
+                        "endOffsets": "105"
+                    }
+                }
+            ]
+        }
+    ]
+}
